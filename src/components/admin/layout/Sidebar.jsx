@@ -1,146 +1,108 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
-  Bell,
-  Search,
-  ChevronDown,
-  User,
+  LayoutDashboard,
+  Users,
   Settings,
-  LogOut,
-  ShieldCheck,
-  Server,
-  ExternalLink
+  ChevronLeft,
+  ChevronRight,
+  Hexagon,
+  Database
 } from 'lucide-react';
-import { ADMIN_PROFILE } from '@/data/mockData';
-import { checkBackendHealth } from '@/services/api';
 
-export default function Navbar() {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [backendHealth, setBackendHealth] = useState({ online: false, status: 'Checking...' });
-  const [notificationsCount, setNotificationsCount] = useState(3);
-  const dropdownRef = useRef(null);
+export default function Sidebar() {
+  const [collapsed, setCollapsed] = useState(false);
+  const pathname = usePathname();
 
-  useEffect(() => {
-    async function checkApi() {
-      const health = await checkBackendHealth();
-      setBackendHealth(health);
-    }
-    checkApi();
+  const mainNav = [
+    { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+    { label: 'Users', href: '/admin/users', icon: Users },
+  ];
 
-    function handleClickOutside(e) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setDropdownOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  // const secondaryNav = [
+  //   { label: 'Settings & API', href: '/admin/settings', icon: Settings },
+  // ];
 
   return (
-    <header className="navbar-container">
-      {/* Search Input */}
-      <div className="search-wrapper">
-        <Search className="search-icon" size={18} />
-        <input
-          type="text"
-          placeholder="Search metrics, users, backend logs... (Press Ctrl+K)"
-          className="search-input"
-        />
-        <span className="search-shortcut">⌘K</span>
+    <aside className={`sidebar-container ${collapsed ? 'collapsed' : ''}`}>
+      {/* Brand Header */}
+      <div className="brand-wrapper">
+        <div className="brand-logo">
+          <Hexagon className="hexagon-logo" size={28} />
+        </div>
+        {!collapsed && (
+          <div className="brand-info animate-fade-in">
+            <span className="brand-name">Invinsible</span>
+          </div>
+        )}
       </div>
 
-      {/* Right Controls */}
-      <div className="navbar-right">
-        {/* Node.js Backend API Status Indicator */}
-        <div className="node-status-badge" title={`Node.js Backend: ${backendHealth.url}`}>
-          <span className={backendHealth.online ? "pulse-live" : "pulse-offline"}></span>
-          <Server size={14} className="node-icon" />
-          <span className="node-status-text">
-            {backendHealth.online ? "Node.js API Connected" : "Mock Data Mode (Node API Offline)"}
-          </span>
-        </div>
-
-        {/* Notifications Button */}
-        <button
-          className="icon-button"
-          aria-label="Notifications"
-          onClick={() => setNotificationsCount(0)}
-        >
-          <Bell size={20} />
-          {notificationsCount > 0 && (
-            <span className="notification-badge">{notificationsCount}</span>
-          )}
-        </button>
-
-        {/* Admin Profile Section */}
-        <div className="profile-wrapper" ref={dropdownRef}>
-          <button
-            className="profile-button"
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            aria-expanded={dropdownOpen}
-          >
-            <div className="avatar-container">
-              <img
-                src={ADMIN_PROFILE.avatar}
-                alt={ADMIN_PROFILE.name}
-                className="profile-avatar"
-              />
-              <span className="online-indicator"></span>
-            </div>
-
-            <div className="profile-details">
-              <span className="admin-name">{ADMIN_PROFILE.name}</span>
-              <span className="admin-role">
-                <ShieldCheck size={12} className="shield-icon" />
-                {ADMIN_PROFILE.role}
-              </span>
-            </div>
-
-            <ChevronDown size={16} className={`chevron-icon ${dropdownOpen ? 'rotate-180' : ''}`} />
-          </button>
-
-          {/* Profile Dropdown Menu */}
-          {dropdownOpen && (
-            <div className="profile-dropdown animate-fade-in">
-              <div className="dropdown-header">
-                <p className="dropdown-user-name">{ADMIN_PROFILE.name}</p>
-                <p className="dropdown-user-email">{ADMIN_PROFILE.email}</p>
-                <div className="dept-tag">{ADMIN_PROFILE.department}</div>
-              </div>
-
-              <div className="dropdown-divider"></div>
-
-              <a href="/admin/settings" className="dropdown-item">
-                <User size={16} />
-                <span>My Profile</span>
-              </a>
-
-              <a href="/admin/settings" className="dropdown-item">
-                <Settings size={16} />
-                <span>Node.js API Settings</span>
-              </a>
-
-              <a
-                href={process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api"}
-                target="_blank"
-                rel="noreferrer"
-                className="dropdown-item"
+      {/* Navigation Sections */}
+      <nav className="nav-menu">
+        <div className="nav-section">
+          {!collapsed && <span className="section-title">MAIN NAVIGATION</span>}
+          {mainNav.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`nav-link ${isActive ? 'active' : ''}`}
+                title={collapsed ? item.label : undefined}
               >
-                <ExternalLink size={16} />
-                <span>Node.js API Direct Link</span>
-              </a>
-
-              <div className="dropdown-divider"></div>
-
-              <button className="dropdown-item danger-item">
-                <LogOut size={16} />
-                <span>Sign Out</span>
-              </button>
-            </div>
-          )}
+                <Icon size={20} className="nav-icon" />
+                {!collapsed && <span className="nav-label">{item.label}</span>}
+                {isActive && <div className="active-indicator"></div>}
+              </Link>
+            );
+          })}
         </div>
+
+        <div className="nav-section">
+          {!collapsed && <span className="section-title">SYSTEM CONFIG</span>}
+          {/* {secondaryNav.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`nav-link ${isActive ? 'active' : ''}`}
+                title={collapsed ? item.label : undefined}
+              >
+                <Icon size={20} className="nav-icon" />
+                {!collapsed && <span className="nav-label">{item.label}</span>}
+              </Link>
+            );
+          })} */}
+        </div>
+      </nav>
+
+      {/* Footer Info & Collapse Toggle */}
+      <div className="sidebar-footer">
+        {!collapsed && (
+          <div className="api-badge-card">
+            <div className="api-badge-header">
+              <Database size={14} className="node-accent" />
+              <span>Node.js Backend</span>
+            </div>
+            <p className="api-badge-text">App Router Server Components active</p>
+          </div>
+        )}
+
+        <button
+          className="collapse-toggle"
+          onClick={() => setCollapsed(!collapsed)}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          {!collapsed && <span>Collapse Sidebar</span>}
+        </button>
       </div>
-    </header>
+    </aside>
   );
 }
