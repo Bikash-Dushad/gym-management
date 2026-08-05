@@ -1,15 +1,19 @@
-// hooks/useUserManagement.js
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   createUserService,
-  deleteUserService,
-  updateUserService,
+  //   deleteUserService,
+  //   updateUserService,
 } from "@/services/admin/client.service";
 
 export function useUserManagement(initialUsers, onSuccess) {
   const [users, setUsers] = useState(initialUsers || []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Sync state when initialUsers prop changes (e.g. after router.refresh())
+  useEffect(() => {
+    setUsers(initialUsers || []);
+  }, [initialUsers]);
 
   const handleCreate = useCallback(
     async (formData) => {
@@ -35,12 +39,13 @@ export function useUserManagement(initialUsers, onSuccess) {
       setLoading(true);
       setError(null);
       try {
-        const updated = await updateUserService(userId, formData);
-        setUsers((prev) =>
-          prev.map((u) => ((u._id || u.id) === userId ? updated : u)),
-        );
-        onSuccess?.("User updated successfully");
-        return updated;
+        // const updated = await updateUserService(userId, formData);
+        // setUsers((prev) =>
+        //   prev.map((u) => ((u._id || u.id) === userId ? updated : u)),
+        // );
+        // onSuccess?.("User updated successfully");
+        // return updated;
+        console.log("user updated");
       } catch (err) {
         setError(err.message || "Failed to update user");
         throw err;
@@ -58,9 +63,10 @@ export function useUserManagement(initialUsers, onSuccess) {
       setLoading(true);
       setError(null);
       try {
-        await deleteUserService(userId);
-        setUsers((prev) => prev.filter((u) => (u._id || u.id) !== userId));
-        onSuccess?.("User deleted successfully");
+        console.log("user deleted");
+        // await deleteUserService(userId);
+        // setUsers((prev) => prev.filter((u) => (u._id || u.id) !== userId));
+        // onSuccess?.("User deleted successfully");
       } catch (err) {
         setError(err.message || "Failed to delete user");
         throw err;

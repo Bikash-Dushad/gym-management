@@ -1,4 +1,3 @@
-// hooks/useQueryState.js
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 
@@ -35,8 +34,12 @@ export function useQueryState(initialQuery) {
   const setQueryField = useCallback(
     (field, value) => {
       setQuery((prev) => {
-        const newQuery = { ...prev, [field]: value };
-        updateQuery(newQuery);
+        const newQuery = {
+          ...prev,
+          [field]: value,
+          ...(field !== "page" ? { page: 1 } : {}),
+        };
+        setTimeout(() => updateQuery(newQuery), 0);
         return newQuery;
       });
     },
@@ -48,7 +51,7 @@ export function useQueryState(initialQuery) {
     (updates) => {
       setQuery((prev) => {
         const newQuery = { ...prev, ...updates };
-        updateQuery(newQuery);
+        setTimeout(() => updateQuery(newQuery), 0);
         return newQuery;
       });
     },

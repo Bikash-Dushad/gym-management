@@ -17,7 +17,18 @@ export default async function UsersPage({ searchParams }) {
     limit: Math.min(100, Math.max(1, Number(params.limit) || 10)),
   };
 
-  const { users, totalUsers, totalPages } = await getListOfUsersService(query);
+  const resData = await getListOfUsersService(payload);
 
-  return <UserList initialUsers={data.users} />;
+  const users = resData?.users || (Array.isArray(resData) ? resData : []);
+  const total = resData?.totalUsers ?? resData?.total ?? users.length;
+  const totalPages = resData?.totalPages ?? Math.ceil(total / payload.limit) ?? 1;
+
+  return (
+    <UserList
+      initialUsers={users}
+      initialQuery={payload}
+      total={total}
+      totalPages={totalPages}
+    />
+  );
 }
