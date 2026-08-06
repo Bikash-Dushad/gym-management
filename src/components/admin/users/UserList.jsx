@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { UserPlus, Edit3, Trash2, AlertOctagon } from "lucide-react";
+import { UserPlus, Edit3, Trash2, AlertOctagon, Eye } from "lucide-react";
 import AddEditUserForm from "./AddEditUserForm";
 import { useQueryState } from "@/hooks/useQueryState";
 import { useUserManagement } from "@/hooks/useUserManagement";
@@ -8,18 +8,23 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useRouter } from "next/navigation";
 
 // Separate presentational components
-const UserRow = ({ user, onEdit, onDelete, isLoading }) => {
-  const id = user.id;
+const UserRow = ({ user, onEdit, onDelete, onViewDetails, isLoading }) => {
+  const id = user.id
 
   return (
-    <tr className="border-b border-white/10 hover:bg-white/[0.025] transition-colors">
+    <tr
+      className="border-b border-white/10 hover:bg-white/[0.05] transition-colors cursor-pointer group"
+      onClick={() => onViewDetails(id)}
+    >
       <td className="px-4 py-3.5 align-middle">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-semibold flex items-center justify-center shrink-0 text-sm">
             {user.name?.charAt(0)?.toUpperCase() || "U"}
           </div>
           <div className="flex flex-col">
-            <span className="font-semibold text-gray-100">{user.name}</span>
+            <span className="font-semibold text-gray-100 group-hover:text-indigo-400 transition-colors">
+              {user.name}
+            </span>
             <span className="text-xs text-gray-400">{user.email}</span>
           </div>
         </div>
@@ -44,11 +49,24 @@ const UserRow = ({ user, onEdit, onDelete, isLoading }) => {
         </span>
       </td>
       <td className="px-4 py-3.5 align-middle text-right">
-        <div className="flex items-center justify-end gap-1.5">
+        <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+          <button
+            className="p-1.5 rounded-lg text-gray-400 hover:bg-indigo-500/15 hover:text-indigo-400 transition-colors cursor-pointer"
+            title="View User Details"
+            onClick={(e) => {
+              e.stopPropagation();
+              onViewDetails(id);
+            }}
+          >
+            <Eye size={15} />
+          </button>
           <button
             className="p-1.5 rounded-lg text-gray-400 hover:bg-indigo-500/15 hover:text-indigo-400 transition-colors disabled:opacity-50 cursor-pointer"
             title="Edit User"
-            onClick={() => onEdit(id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(id);
+            }}
             disabled={isLoading}
           >
             <Edit3 size={15} />
@@ -56,7 +74,10 @@ const UserRow = ({ user, onEdit, onDelete, isLoading }) => {
           <button
             className="p-1.5 rounded-lg text-gray-400 hover:bg-rose-500/15 hover:text-rose-400 transition-colors disabled:opacity-50 cursor-pointer"
             title="Delete User"
-            onClick={() => onDelete(id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(id);
+            }}
             disabled={isLoading}
           >
             <Trash2 size={15} />
@@ -225,6 +246,7 @@ export default function UserList({
                   user={user}
                   onEdit={openEditModal}
                   onDelete={handleDelete}
+                  onViewDetails={(id) => router.push(`/admin/users/${id}`)}
                   isLoading={loading}
                 />
               ))

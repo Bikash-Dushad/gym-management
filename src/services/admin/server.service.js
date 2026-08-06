@@ -23,3 +23,11 @@ export const listOfMembershipPlansService = async () => {
   }
   return response;
 }
+
+export const getUserDetailsService = async (userId) => {
+  const response = await postData('/admin/get-user-details', userId)
+  if (!response.success) {
+    throw new Error(response.message)
+  }
+  return response.data
+}
