@@ -44,7 +44,6 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
   const [plansLoading, setPlansLoading] = useState(true);
   const [plansError, setPlansError] = useState("");
 
-  // Fetch membership plans (always needed, for both Add and Edit)
   useEffect(() => {
     const fetchPlans = async () => {
       try {
@@ -60,7 +59,6 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
     fetchPlans();
   }, []);
 
-  // Fetch the specific user when editing
   useEffect(() => {
     if (!userId) return;
 
@@ -107,8 +105,6 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Map internal formData field names to what the backend expects,
-    // and coerce numeric fields from strings to actual numbers.
     const payload = {
       name: formData.name,
       email: formData.email,
@@ -123,95 +119,105 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
       trainerId: formData.trainer || "",
     };
 
-    console.log("submitting payload:", payload); // remove once confirmed working
-
     onSave(payload);
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="glass-panel modal-card animate-fade-in">
-        <div className="modal-header">
-          <h3 className="modal-title">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="w-full max-w-lg p-6 bg-[#121824] border border-white/10 rounded-2xl shadow-2xl flex flex-col gap-5 animate-fade-in max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between pb-4 border-b border-white/10">
+          <h3 className="text-lg font-bold text-gray-100">
             {isEditMode ? "Edit User Details" : "Add New User"}
           </h3>
-          <button className="close-btn" onClick={onClose} type="button">
+          <button
+            className="text-gray-400 hover:text-gray-100 p-1 rounded-md transition-colors cursor-pointer"
+            onClick={onClose}
+            type="button"
+          >
             <X size={20} />
           </button>
         </div>
 
         {userLoading ? (
-          <div className="modal-body">
+          <div className="py-8 text-center text-gray-400 text-sm">
             <p>Loading user details...</p>
           </div>
         ) : userError ? (
-          <div className="modal-body">
-            <p className="form-error-text">{userError}</p>
+          <div className="py-4 text-center text-rose-400 text-sm">
+            <p>{userError}</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="modal-body">
-            <div className="form-group">
-              <label className="form-label">Full Name</label>
-              <div className="input-with-icon">
-                <User size={16} className="input-icon" />
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-medium text-gray-300">
+                Full Name
+              </label>
+              <div className="relative flex items-center">
+                <User size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
                 <input
                   type="text"
                   required
                   value={formData.name}
                   onChange={handleChange("name")}
                   placeholder="e.g. John Doe"
-                  className="form-input"
+                  className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
                 />
               </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Email Address</label>
-              <div className="input-with-icon">
-                <Mail size={16} className="input-icon" />
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-medium text-gray-300">
+                Email Address
+              </label>
+              <div className="relative flex items-center">
+                <Mail size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
                 <input
                   type="email"
                   required
                   value={formData.email}
                   onChange={handleChange("email")}
                   placeholder="john.doe@gmail.com"
-                  className="form-input"
+                  className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
                 />
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group flex-1">
-                <label className="form-label">Phone Number</label>
-                <div className="input-with-icon">
-                  <Phone size={16} className="input-icon" />
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col gap-1.5 flex-1">
+                <label className="text-xs font-medium text-gray-300">
+                  Phone Number
+                </label>
+                <div className="relative flex items-center">
+                  <Phone size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
                   <input
                     type="tel"
                     value={formData.phone}
                     onChange={handleChange("phone")}
                     placeholder="e.g. 9800000000"
-                    className="form-input"
+                    className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
                   />
                 </div>
               </div>
-              <div className="form-group flex-1">
-                <label className="form-label">Age</label>
+              <div className="flex flex-col gap-1.5 flex-1">
+                <label className="text-xs font-medium text-gray-300">Age</label>
                 <input
                   type="number"
                   min="0"
                   value={formData.age}
                   onChange={handleChange("age")}
                   placeholder="e.g. 28"
-                  className="form-input"
+                  className="w-full py-2.5 px-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
                 />
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group flex-1">
-                <label className="form-label">Height (ft)</label>
-                <div className="input-with-icon">
-                  <Ruler size={16} className="input-icon" />
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col gap-1.5 flex-1">
+                <label className="text-xs font-medium text-gray-300">
+                  Height (ft)
+                </label>
+                <div className="relative flex items-center">
+                  <Ruler size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
                   <input
                     type="number"
                     min="0"
@@ -220,14 +226,16 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
                     value={formData.height}
                     onChange={handleChange("height")}
                     placeholder="e.g. 5.5"
-                    className="form-input"
+                    className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
                   />
                 </div>
               </div>
-              <div className="form-group flex-1">
-                <label className="form-label">Weight (kg)</label>
-                <div className="input-with-icon">
-                  <WeightIcon size={16} className="input-icon" />
+              <div className="flex flex-col gap-1.5 flex-1">
+                <label className="text-xs font-medium text-gray-300">
+                  Weight (kg)
+                </label>
+                <div className="relative flex items-center">
+                  <WeightIcon size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
                   <input
                     type="number"
                     min="0"
@@ -235,21 +243,23 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
                     value={formData.weight}
                     onChange={handleChange("weight")}
                     placeholder="e.g. 70"
-                    className="form-input"
+                    className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group flex-1">
-                <label className="form-label">Blood Group</label>
-                <div className="input-with-icon">
-                  <Droplet size={16} className="input-icon" />
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col gap-1.5 flex-1">
+                <label className="text-xs font-medium text-gray-300">
+                  Blood Group
+                </label>
+                <div className="relative flex items-center">
+                  <Droplet size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
                   <select
                     value={formData.bloodGroup}
                     onChange={handleChange("bloodGroup")}
-                    className="form-select"
+                    className="w-full py-2.5 pl-10 pr-3 bg-[#121824] border border-white/10 rounded-lg text-gray-100 text-sm outline-none focus:border-indigo-500 transition-all cursor-pointer"
                   >
                     <option value="">Select blood group</option>
                     {BLOOD_GROUPS.map((bg) => (
@@ -260,14 +270,14 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
                   </select>
                 </div>
               </div>
-              <div className="form-group flex-1">
-                <label className="form-label">Type</label>
-                <div className="input-with-icon">
-                  <Tag size={16} className="input-icon" />
+              <div className="flex flex-col gap-1.5 flex-1">
+                <label className="text-xs font-medium text-gray-300">Type</label>
+                <div className="relative flex items-center">
+                  <Tag size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
                   <select
                     value={formData.type}
                     onChange={handleChange("type")}
-                    className="form-select"
+                    className="w-full py-2.5 pl-10 pr-3 bg-[#121824] border border-white/10 rounded-lg text-gray-100 text-sm outline-none focus:border-indigo-500 transition-all cursor-pointer"
                   >
                     <option value="">Select Type</option>
                     {TYPE.map((t) => (
@@ -280,15 +290,17 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group flex-1">
-                <label className="form-label">Membership Plan</label>
-                <div className="input-with-icon">
-                  <Award size={16} className="input-icon" />
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col gap-1.5 flex-1">
+                <label className="text-xs font-medium text-gray-300">
+                  Membership Plan
+                </label>
+                <div className="relative flex items-center">
+                  <Award size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
                   <select
                     value={formData.membershipPlan}
                     onChange={handlePlanChange}
-                    className="form-select"
+                    className="w-full py-2.5 pl-10 pr-3 bg-[#121824] border border-white/10 rounded-lg text-gray-100 text-sm outline-none focus:border-indigo-500 transition-all cursor-pointer disabled:opacity-50"
                     disabled={plansLoading}
                     required
                   >
@@ -302,36 +314,38 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
                     ))}
                   </select>
                 </div>
-                {plansError && <p className="form-error-text">{plansError}</p>}
+                {plansError && (
+                  <p className="text-xs text-rose-400 mt-1">{plansError}</p>
+                )}
               </div>
-              <div className="form-group flex-1">
-                <label className="form-label">Price</label>
+              <div className="flex flex-col gap-1.5 flex-1">
+                <label className="text-xs font-medium text-gray-300">Price</label>
                 <input
                   type="number"
                   min="0"
                   readOnly
                   value={formData.price}
                   placeholder="Auto-filled from plan"
-                  className="form-input"
+                  className="w-full py-2.5 px-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none opacity-70 cursor-not-allowed"
                 />
               </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Trainer</label>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-medium text-gray-300">Trainer</label>
               <input
                 type="text"
                 value={formData.trainer}
                 onChange={handleChange("trainer")}
                 placeholder="e.g. Ramesh Shrestha"
-                className="form-input"
+                className="w-full py-2.5 px-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
               />
             </div>
 
-            <div className="modal-footer">
+            <div className="flex items-center justify-end gap-3 pt-3 mt-2 border-t border-white/10">
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="px-4 py-2 bg-white/10 hover:bg-white/15 text-gray-200 rounded-lg text-sm font-semibold transition-colors cursor-pointer disabled:opacity-50"
                 onClick={onClose}
                 disabled={saving}
               >
@@ -339,7 +353,7 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
               </button>
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-lg text-sm font-semibold transition-all hover:shadow-[0_0_15px_rgba(99,102,241,0.4)] cursor-pointer disabled:opacity-50"
                 disabled={saving}
               >
                 <Check size={16} />
@@ -349,8 +363,6 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
           </form>
         )}
       </div>
-
-
     </div>
   );
 }

@@ -15,3 +15,11 @@ export const getListOfUsersService = async (payload) => {
   }
   return response.data;
 };
+
+export const listOfMembershipPlansService = async () => {
+  const response = await getData("/admin/list-of-membership-plans")
+  if (!response.success) {
+    throw new Error(response.message);
+  }
+  return response;
+}

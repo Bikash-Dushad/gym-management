@@ -47,3 +47,19 @@ export const getUserDetailsService = async (userId) => {
   }
   return response.data;
 };
+
+export const createMembershipPlanService = async (payload) => {
+  const response = await postData("/admin/create-membership-plan", payload);
+  if (!response.success) {
+    throw new Error(response.message);
+  }
+  return response.data;
+};
+
+export const updateMembershipPlanService = async (payload) => {
+  const response = await postData("/admin/update-membership-plan", payload);
+  if (!response.success) {
+    throw new Error(response.message);
+  }
+  return response.data;
+};
