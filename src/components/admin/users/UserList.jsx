@@ -8,8 +8,15 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useRouter } from "next/navigation";
 
 // Separate presentational components
-const UserRow = ({ user, onEdit, onDelete, onViewDetails, isLoading }) => {
-  const id = user.id
+const UserRow = ({
+  user,
+  onEdit,
+  onDelete,
+  onViewDetails,
+  onRenew,
+  isLoading,
+}) => {
+  const id = user.id;
 
   return (
     <tr
@@ -29,13 +36,21 @@ const UserRow = ({ user, onEdit, onDelete, onViewDetails, isLoading }) => {
           </div>
         </div>
       </td>
-      <td className="px-4 py-3.5 align-middle text-sm text-gray-300">{user.phone}</td>
-      <td className="px-4 py-3.5 align-middle text-sm text-gray-300">{user.planTitle}</td>
-      <td className="px-4 py-3.5 align-middle text-sm text-gray-400">
-        {user.subscribedDate ? new Date(user.subscribedDate).toLocaleDateString() : "N/A"}
+      <td className="px-4 py-3.5 align-middle text-sm text-gray-300">
+        {user.phone}
+      </td>
+      <td className="px-4 py-3.5 align-middle text-sm text-gray-300">
+        {user.planTitle}
       </td>
       <td className="px-4 py-3.5 align-middle text-sm text-gray-400">
-        {user.expiryDate ? new Date(user.expiryDate).toLocaleDateString() : "N/A"}
+        {user.subscribedDate
+          ? new Date(user.subscribedDate).toLocaleDateString()
+          : "N/A"}
+      </td>
+      <td className="px-4 py-3.5 align-middle text-sm text-gray-400">
+        {user.expiryDate
+          ? new Date(user.expiryDate).toLocaleDateString()
+          : "N/A"}
       </td>
       <td className="px-4 py-3.5 align-middle">
         <span
@@ -49,7 +64,10 @@ const UserRow = ({ user, onEdit, onDelete, onViewDetails, isLoading }) => {
         </span>
       </td>
       <td className="px-4 py-3.5 align-middle text-right">
-        <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="flex items-center justify-end gap-1.5"
+          onClick={(e) => e.stopPropagation()}
+        >
           <button
             className="p-1.5 rounded-lg text-gray-400 hover:bg-indigo-500/15 hover:text-indigo-400 transition-colors cursor-pointer"
             title="View User Details"
@@ -83,6 +101,19 @@ const UserRow = ({ user, onEdit, onDelete, onViewDetails, isLoading }) => {
             <Trash2 size={15} />
           </button>
         </div>
+      </td>
+      <td className="px-4 py-3.5 align-middle">
+        <button
+          className="p-1.5 rounded-lg text-gray-400 hover:bg-indigo-500/15 hover:text-indigo-400 transition-colors disabled:opacity-50 cursor-pointer"
+          title="Renew"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRenew(id);
+          }}
+          disabled={isLoading}
+        >
+          Renew
+        </button>
       </td>
     </tr>
   );
@@ -202,6 +233,10 @@ export default function UserList({
     }
   };
 
+  const handleRenew = (id) => {
+    console.log("Renew user:", id);
+  };
+
   return (
     <div className="bg-[#121824]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-6 flex flex-col gap-5 animate-fade-in">
       <div className="flex items-center justify-between flex-wrap gap-4">
@@ -236,6 +271,7 @@ export default function UserList({
               <th className="px-4 py-3.5">Expiry Date</th>
               <th className="px-4 py-3.5">Status</th>
               <th className="px-4 py-3.5 text-right">ACTIONS</th>
+              <th className="px-4 py-3.5">Renew</th>
             </tr>
           </thead>
           <tbody>
@@ -247,6 +283,7 @@ export default function UserList({
                   onEdit={openEditModal}
                   onDelete={handleDelete}
                   onViewDetails={(id) => router.push(`/admin/users/${id}`)}
+                  onRenew={handleRenew}
                   isLoading={loading}
                 />
               ))

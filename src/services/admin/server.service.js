@@ -17,17 +17,25 @@ export const getListOfUsersService = async (payload) => {
 };
 
 export const listOfMembershipPlansService = async () => {
-  const response = await getData("/admin/list-of-membership-plans")
+  const response = await getData("/admin/list-of-membership-plans");
   if (!response.success) {
     throw new Error(response.message);
   }
   return response;
-}
+};
 
 export const getUserDetailsService = async (userId) => {
-  const response = await postData('/admin/get-user-details', userId)
+  const response = await postData("/admin/get-user-details", userId);
   if (!response.success) {
-    throw new Error(response.message)
+    throw new Error(response.message);
   }
-  return response.data
-}
+  return response.data;
+};
+
+export const adminDashboardService = async () => {
+  const response = await getData("/admin/admin-dashboard");
+  if (!response.success) {
+    throw new Error(response.message);
+  }
+  return response.data;
+};
