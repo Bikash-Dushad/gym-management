@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { UserPlus, Edit3, Trash2, AlertOctagon, Eye } from "lucide-react";
+import { UserPlus, Edit3, Trash2, AlertOctagon, Eye, RefreshCw } from "lucide-react";
 import AddEditUserForm from "./AddEditUserForm";
+import RenewMembershipModal from "./RenewMembershipModal";
 import { useQueryState } from "@/hooks/useQueryState";
 import { useUserManagement } from "@/hooks/useUserManagement";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -16,7 +17,7 @@ const UserRow = ({
   onRenew,
   isLoading,
 }) => {
-  const id = user.id;
+  const id = user.id || user._id;
 
   return (
     <tr
@@ -104,15 +105,16 @@ const UserRow = ({
       </td>
       <td className="px-4 py-3.5 align-middle">
         <button
-          className="p-1.5 rounded-lg text-gray-400 hover:bg-indigo-500/15 hover:text-indigo-400 transition-colors disabled:opacity-50 cursor-pointer"
-          title="Renew"
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 hover:border-indigo-500/40 text-xs font-semibold transition-all disabled:opacity-50 cursor-pointer"
+          title="Renew Membership"
           onClick={(e) => {
             e.stopPropagation();
             onRenew(id);
           }}
           disabled={isLoading}
         >
-          Renew
+          <RefreshCw size={13} />
+          <span>Renew</span>
         </button>
       </td>
     </tr>
@@ -186,6 +188,7 @@ export default function UserList({
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUserId, setEditingUserId] = useState(null);
+  const [renewUserId, setRenewUserId] = useState(null);
 
   const { query, setQueryField, setQueryBatch } = useQueryState(initialQuery);
   const {
@@ -214,6 +217,19 @@ export default function UserList({
     setError(null);
   };
 
+  const openRenewModal = (id) => {
+    setRenewUserId(id);
+  };
+
+  const closeRenewModal = () => {
+    setRenewUserId(null);
+  };
+
+  const handleRenewSuccess = () => {
+    closeRenewModal();
+    router.refresh();
+  };
+
   const handlePageChange = (newPage) => {
     setQueryBatch({ page: newPage });
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -231,10 +247,6 @@ export default function UserList({
     } catch (err) {
       // Error handled in hook
     }
-  };
-
-  const handleRenew = (id) => {
-    console.log("Renew user:", id);
   };
 
   return (
@@ -283,14 +295,14 @@ export default function UserList({
                   onEdit={openEditModal}
                   onDelete={handleDelete}
                   onViewDetails={(id) => router.push(`/admin/users/${id}`)}
-                  onRenew={handleRenew}
+                  onRenew={openRenewModal}
                   isLoading={loading}
                 />
               ))
             ) : (
               <tr>
                 <td
-                  colSpan="7"
+                  colSpan="8"
                   className="px-4 py-10 text-center text-gray-400 text-sm"
                 >
                   {loading ? "Loading..." : "No users found."}
@@ -319,6 +331,14 @@ export default function UserList({
           onClose={closeModal}
           onSave={addOrEditUser}
           saving={loading}
+        />
+      )}
+
+      {renewUserId && (
+        <RenewMembershipModal
+          userId={renewUserId}
+          onClose={closeRenewModal}
+          onSuccess={handleRenewSuccess}
         />
       )}
     </div>

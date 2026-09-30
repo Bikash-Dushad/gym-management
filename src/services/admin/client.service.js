@@ -72,3 +72,10 @@ export const adminDashboardService = async () => {
   return response.data;
 };
 
+export const renewMembershipService = async (payload) => {
+  const response = await postData("/admin/renew-membership", payload);
+  if (!response.success) {
+    throw new Error(response.message);
+  }
+  return response.data;
+};

@@ -21,8 +21,10 @@ import {
   AlertOctagon,
   Shield,
   Clock,
+  RefreshCw,
 } from "lucide-react";
 import AddEditUserForm from "./AddEditUserForm";
+import RenewMembershipModal from "./RenewMembershipModal";
 import { useUserManagement } from "@/hooks/useUserManagement";
 
 export default function UserDetails({ userId, initialData, initialError }) {
@@ -30,12 +32,13 @@ export default function UserDetails({ userId, initialData, initialError }) {
   const [data, setData] = useState(initialData);
   const [error, setError] = useState(initialError);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isRenewModalOpen, setIsRenewModalOpen] = useState(false);
 
   const { loading, handleDelete, handleUpdate } = useUserManagement([]);
 
   const user = data?.users || data?.user || data || {};
   const membership = data?.membership || {};
-  const membershipPlan = data?.membershipPlans || {}
+  const membershipPlan = data?.membershipPlans || {};
 
   const handleEditSave = async (formData) => {
     try {
@@ -45,6 +48,11 @@ export default function UserDetails({ userId, initialData, initialError }) {
     } catch (err) {
       setError(err.message || "Failed to update user details");
     }
+  };
+
+  const handleRenewSuccess = () => {
+    setIsRenewModalOpen(false);
+    router.refresh();
   };
 
   const onDeleteClick = async () => {
@@ -71,6 +79,13 @@ export default function UserDetails({ userId, initialData, initialError }) {
         </Link>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsRenewModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-sm font-semibold transition-all hover:shadow-[0_0_15px_rgba(99,102,241,0.35)] cursor-pointer"
+          >
+            <RefreshCw size={16} />
+            <span>Renew Membership</span>
+          </button>
           <button
             onClick={() => setIsEditModalOpen(true)}
             className="flex items-center gap-2 px-4 py-2 bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/30 text-indigo-300 rounded-xl text-sm font-semibold transition-all hover:shadow-[0_0_15px_rgba(99,102,241,0.2)] cursor-pointer"
@@ -193,6 +208,14 @@ export default function UserDetails({ userId, initialData, initialError }) {
           onClose={() => setIsEditModalOpen(false)}
           onSave={handleEditSave}
           saving={loading}
+        />
+      )}
+
+      {isRenewModalOpen && (
+        <RenewMembershipModal
+          userId={userId}
+          onClose={() => setIsRenewModalOpen(false)}
+          onSuccess={handleRenewSuccess}
         />
       )}
     </div>

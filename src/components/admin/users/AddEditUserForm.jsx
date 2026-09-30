@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   listOfMembershipPlansService,
   getUserDetailsService,
@@ -35,6 +36,7 @@ const emptyForm = {
 
 export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
   const isEditMode = Boolean(userId);
+  const [mounted, setMounted] = useState(false);
 
   const [formData, setFormData] = useState(emptyForm);
   const [userLoading, setUserLoading] = useState(isEditMode);
@@ -43,6 +45,10 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
   const [plans, setPlans] = useState([]);
   const [plansLoading, setPlansLoading] = useState(true);
   const [plansError, setPlansError] = useState("");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -122,10 +128,12 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
     onSave(payload);
   };
 
-  return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="w-full max-w-lg p-6 bg-[#121824] border border-white/10 rounded-2xl shadow-2xl flex flex-col gap-5 animate-fade-in max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between pb-4 border-b border-white/10">
+  if (!mounted) return null;
+
+  return createPortal(
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="w-full max-w-lg bg-[#121824] border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[90vh] my-auto animate-fade-in overflow-hidden">
+        <div className="flex items-center justify-between p-6 pb-4 border-b border-white/10 shrink-0">
           <h3 className="text-lg font-bold text-gray-100">
             {isEditMode ? "Edit User Details" : "Add New User"}
           </h3>
@@ -139,210 +147,247 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
         </div>
 
         {userLoading ? (
-          <div className="py-8 text-center text-gray-400 text-sm">
+          <div className="p-8 text-center text-gray-400 text-sm flex items-center justify-center min-h-[300px]">
             <p>Loading user details...</p>
           </div>
         ) : userError ? (
-          <div className="py-4 text-center text-rose-400 text-sm">
+          <div className="p-6 text-center text-rose-400 text-sm">
             <p>{userError}</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-gray-300">
-                Full Name
-              </label>
-              <div className="relative flex items-center">
-                <User size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={handleChange("name")}
-                  placeholder="e.g. John Doe"
-                  className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-gray-300">
-                Email Address
-              </label>
-              <div className="relative flex items-center">
-                <Mail size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
-                <input
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange("email")}
-                  placeholder="john.doe@gmail.com"
-                  className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex flex-col gap-1.5 flex-1">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col flex-1 min-h-0 overflow-hidden"
+          >
+            <div className="p-6 flex flex-col gap-4 overflow-y-auto flex-1">
+              <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-medium text-gray-300">
-                  Phone Number
+                  Full Name
                 </label>
                 <div className="relative flex items-center">
-                  <Phone size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
+                  <User
+                    size={16}
+                    className="absolute left-3 text-gray-500 pointer-events-none"
+                  />
                   <input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleChange("phone")}
-                    placeholder="e.g. 9800000000"
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={handleChange("name")}
+                    placeholder="e.g. John Doe"
                     className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
                   />
                 </div>
               </div>
-              <div className="flex flex-col gap-1.5 flex-1">
-                <label className="text-xs font-medium text-gray-300">Age</label>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-gray-300">
+                  Email Address
+                </label>
+                <div className="relative flex items-center">
+                  <Mail
+                    size={16}
+                    className="absolute left-3 text-gray-500 pointer-events-none"
+                  />
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange("email")}
+                    placeholder="john.doe@gmail.com"
+                    className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-xs font-medium text-gray-300">
+                    Phone Number
+                  </label>
+                  <div className="relative flex items-center">
+                    <Phone
+                      size={16}
+                      className="absolute left-3 text-gray-500 pointer-events-none"
+                    />
+                    <input
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange("phone")}
+                      placeholder="e.g. 9800000000"
+                      className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-xs font-medium text-gray-300">
+                    Age
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={formData.age}
+                    onChange={handleChange("age")}
+                    placeholder="e.g. 28"
+                    className="w-full py-2.5 px-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-xs font-medium text-gray-300">
+                    Height (ft)
+                  </label>
+                  <div className="relative flex items-center">
+                    <Ruler
+                      size={16}
+                      className="absolute left-3 text-gray-500 pointer-events-none"
+                    />
+                    <input
+                      type="number"
+                      min="0"
+                      max="10"
+                      step="0.01"
+                      value={formData.height}
+                      onChange={handleChange("height")}
+                      placeholder="e.g. 5.5"
+                      className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-xs font-medium text-gray-300">
+                    Weight (kg)
+                  </label>
+                  <div className="relative flex items-center">
+                    <WeightIcon
+                      size={16}
+                      className="absolute left-3 text-gray-500 pointer-events-none"
+                    />
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={formData.weight}
+                      onChange={handleChange("weight")}
+                      placeholder="e.g. 70"
+                      className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-xs font-medium text-gray-300">
+                    Blood Group
+                  </label>
+                  <div className="relative flex items-center">
+                    <Droplet
+                      size={16}
+                      className="absolute left-3 text-gray-500 pointer-events-none"
+                    />
+                    <select
+                      value={formData.bloodGroup}
+                      onChange={handleChange("bloodGroup")}
+                      className="w-full py-2.5 pl-10 pr-3 bg-[#121824] border border-white/10 rounded-lg text-gray-100 text-sm outline-none focus:border-indigo-500 transition-all cursor-pointer"
+                    >
+                      <option value="">Select blood group</option>
+                      {BLOOD_GROUPS.map((bg) => (
+                        <option key={bg} value={bg}>
+                          {bg}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-xs font-medium text-gray-300">
+                    Type
+                  </label>
+                  <div className="relative flex items-center">
+                    <Tag
+                      size={16}
+                      className="absolute left-3 text-gray-500 pointer-events-none"
+                    />
+                    <select
+                      value={formData.type}
+                      onChange={handleChange("type")}
+                      className="w-full py-2.5 pl-10 pr-3 bg-[#121824] border border-white/10 rounded-lg text-gray-100 text-sm outline-none focus:border-indigo-500 transition-all cursor-pointer"
+                    >
+                      <option value="">Select Type</option>
+                      {TYPE.map((t) => (
+                        <option key={t} value={t}>
+                          {t}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-xs font-medium text-gray-300">
+                    Membership Plan
+                  </label>
+                  <div className="relative flex items-center">
+                    <Award
+                      size={16}
+                      className="absolute left-3 text-gray-500 pointer-events-none"
+                    />
+                    <select
+                      value={formData.membershipPlan}
+                      onChange={handlePlanChange}
+                      className="w-full py-2.5 pl-10 pr-3 bg-[#121824] border border-white/10 rounded-lg text-gray-100 text-sm outline-none focus:border-indigo-500 transition-all cursor-pointer disabled:opacity-50"
+                      disabled={plansLoading}
+                      required
+                    >
+                      <option value="">
+                        {plansLoading ? "Loading plans..." : "Select a plan"}
+                      </option>
+                      {plans.map((plan) => (
+                        <option key={plan.id} value={plan.id}>
+                          {plan.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {plansError && (
+                    <p className="text-xs text-rose-400 mt-1">{plansError}</p>
+                  )}
+                </div>
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-xs font-medium text-gray-300">
+                    Price
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    readOnly
+                    value={formData.price}
+                    placeholder="Auto-filled from plan"
+                    className="w-full py-2.5 px-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none opacity-70 cursor-not-allowed"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-gray-300">
+                  Trainer
+                </label>
                 <input
-                  type="number"
-                  min="0"
-                  value={formData.age}
-                  onChange={handleChange("age")}
-                  placeholder="e.g. 28"
+                  type="text"
+                  value={formData.trainer}
+                  onChange={handleChange("trainer")}
+                  placeholder="e.g. Ramesh Shrestha"
                   className="w-full py-2.5 px-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
                 />
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex flex-col gap-1.5 flex-1">
-                <label className="text-xs font-medium text-gray-300">
-                  Height (ft)
-                </label>
-                <div className="relative flex items-center">
-                  <Ruler size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
-                  <input
-                    type="number"
-                    min="0"
-                    max="10"
-                    step="0.01"
-                    value={formData.height}
-                    onChange={handleChange("height")}
-                    placeholder="e.g. 5.5"
-                    className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col gap-1.5 flex-1">
-                <label className="text-xs font-medium text-gray-300">
-                  Weight (kg)
-                </label>
-                <div className="relative flex items-center">
-                  <WeightIcon size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={formData.weight}
-                    onChange={handleChange("weight")}
-                    placeholder="e.g. 70"
-                    className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex flex-col gap-1.5 flex-1">
-                <label className="text-xs font-medium text-gray-300">
-                  Blood Group
-                </label>
-                <div className="relative flex items-center">
-                  <Droplet size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
-                  <select
-                    value={formData.bloodGroup}
-                    onChange={handleChange("bloodGroup")}
-                    className="w-full py-2.5 pl-10 pr-3 bg-[#121824] border border-white/10 rounded-lg text-gray-100 text-sm outline-none focus:border-indigo-500 transition-all cursor-pointer"
-                  >
-                    <option value="">Select blood group</option>
-                    {BLOOD_GROUPS.map((bg) => (
-                      <option key={bg} value={bg}>
-                        {bg}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="flex flex-col gap-1.5 flex-1">
-                <label className="text-xs font-medium text-gray-300">Type</label>
-                <div className="relative flex items-center">
-                  <Tag size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
-                  <select
-                    value={formData.type}
-                    onChange={handleChange("type")}
-                    className="w-full py-2.5 pl-10 pr-3 bg-[#121824] border border-white/10 rounded-lg text-gray-100 text-sm outline-none focus:border-indigo-500 transition-all cursor-pointer"
-                  >
-                    <option value="">Select Type</option>
-                    {TYPE.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex flex-col gap-1.5 flex-1">
-                <label className="text-xs font-medium text-gray-300">
-                  Membership Plan
-                </label>
-                <div className="relative flex items-center">
-                  <Award size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
-                  <select
-                    value={formData.membershipPlan}
-                    onChange={handlePlanChange}
-                    className="w-full py-2.5 pl-10 pr-3 bg-[#121824] border border-white/10 rounded-lg text-gray-100 text-sm outline-none focus:border-indigo-500 transition-all cursor-pointer disabled:opacity-50"
-                    disabled={plansLoading}
-                    required
-                  >
-                    <option value="">
-                      {plansLoading ? "Loading plans..." : "Select a plan"}
-                    </option>
-                    {plans.map((plan) => (
-                      <option key={plan.id} value={plan.id}>
-                        {plan.title}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {plansError && (
-                  <p className="text-xs text-rose-400 mt-1">{plansError}</p>
-                )}
-              </div>
-              <div className="flex flex-col gap-1.5 flex-1">
-                <label className="text-xs font-medium text-gray-300">Price</label>
-                <input
-                  type="number"
-                  min="0"
-                  readOnly
-                  value={formData.price}
-                  placeholder="Auto-filled from plan"
-                  className="w-full py-2.5 px-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none opacity-70 cursor-not-allowed"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-gray-300">Trainer</label>
-              <input
-                type="text"
-                value={formData.trainer}
-                onChange={handleChange("trainer")}
-                placeholder="e.g. Ramesh Shrestha"
-                className="w-full py-2.5 px-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
-              />
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-3 mt-2 border-t border-white/10">
+            <div className="flex items-center justify-end gap-3 p-6 pt-3 border-t border-white/10 shrink-0 bg-[#121824]">
               <button
                 type="button"
                 className="px-4 py-2 bg-white/10 hover:bg-white/15 text-gray-200 rounded-lg text-sm font-semibold transition-colors cursor-pointer disabled:opacity-50"
@@ -363,6 +408,7 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

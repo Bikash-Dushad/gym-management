@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import {
   createUserService,
+  renewMembershipService,
   //   deleteUserService,
   //   updateUserService,
 } from "@/services/admin/client.service";
@@ -56,6 +57,24 @@ export function useUserManagement(initialUsers, onSuccess) {
     [onSuccess],
   );
 
+  const handleRenew = useCallback(
+    async (payload) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await renewMembershipService(payload);
+        onSuccess?.("Membership renewed successfully");
+        return res;
+      } catch (err) {
+        setError(err.message || "Failed to renew membership");
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [onSuccess],
+  );
+
   const handleDelete = useCallback(
     async (userId) => {
       if (!confirm("Are you sure you want to delete this user?")) return;
@@ -85,6 +104,7 @@ export function useUserManagement(initialUsers, onSuccess) {
     setError,
     handleCreate,
     handleUpdate,
+    handleRenew,
     handleDelete,
   };
 }
