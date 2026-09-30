@@ -63,3 +63,12 @@ export const updateMembershipPlanService = async (payload) => {
   }
   return response.data;
 };
+
+export const adminDashboardService = async () => {
+  const response = await getData("/admin/admin-dashboard");
+  if (!response.success) {
+    throw new Error(response.message);
+  }
+  return response.data;
+};
+

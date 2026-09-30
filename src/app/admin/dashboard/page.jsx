@@ -1,23 +1,18 @@
-import { cookies } from "next/headers";
-import { getAdminProfileService } from "@/services/admin/server.service";
-import { redirect } from "next/navigation";
+import AdminDashboard from "@/components/admin/dashboard/AdminDashboard";
+import { adminDashboardService } from "@/services/admin/server.service";
 
 export const metadata = {
-  title: "Admin Dashboard | Nexus",
-  description: "Server-side rendered admin dashboard metrics",
+  title: "Admin Dashboard | Nexus Gym",
+  description:
+    "Server-side rendered admin dashboard metrics and gym management",
 };
 
 export default async function DashboardPage() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("adminToken")?.value;
-
-  if (!token) {
-    redirect("/admin-login");
+  try {
+    const response = await adminDashboardService();
+    return <AdminDashboard initialData={response} />;
+  } catch (error) {
+    console.error("Failed to fetch initial dashboard data:", error);
+    return <AdminDashboard initialData={null} />;
   }
-
-  return (
-    <>
-      <p>hello</p>
-    </>
-  );
 }

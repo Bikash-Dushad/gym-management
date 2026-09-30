@@ -87,18 +87,6 @@ export default function Sidebar() {
 
       {/* Footer Info & Collapse Toggle */}
       <div className="p-3.5 border-t border-white/10 flex flex-col gap-3">
-        {!collapsed && (
-          <div className="p-3 bg-white/[0.03] border border-white/10 rounded-lg">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-200">
-              <Database size={14} className="text-emerald-400" />
-              <span>Node.js Backend</span>
-            </div>
-            <p className="text-[0.7rem] text-gray-500 mt-0.5">
-              App Router Server Components active
-            </p>
-          </div>
-        )}
-
         <button
           className="flex items-center justify-center gap-2 w-full p-2.5 rounded-xl text-gray-400 text-xs font-medium hover:bg-white/10 hover:text-gray-100 transition-colors cursor-pointer"
           onClick={() => setCollapsed(!collapsed)}
