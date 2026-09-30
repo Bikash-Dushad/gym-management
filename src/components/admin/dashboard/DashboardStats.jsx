@@ -23,7 +23,7 @@ export default function DashboardStats({
       {/* Total Members */}
       <div className="relative group p-5 bg-[#121824]/70 border border-white/10 rounded-2xl backdrop-blur-xl hover:border-indigo-500/40 transition-all hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] overflow-hidden">
 
-        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-indigo-500/10 to-transparent rounded-bl-full pointer-events-none" />
+        <div className="absolute top-0 right-0 w-24 h-24 bg-linear-to-br from-indigo-500/10 to-transparent rounded-bl-full pointer-events-none" />
 
         <div className="flex items-center justify-between">
 
@@ -64,7 +64,7 @@ export default function DashboardStats({
         <div className="mt-1.5 w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
 
           <div
-            className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full transition-all duration-500"
+            className="h-full bg-linear-to-r from-indigo-500 to-emerald-400 rounded-full transition-all duration-500"
             style={{
               width: `${Math.min(
                 100,
@@ -80,7 +80,7 @@ export default function DashboardStats({
       {/* Active Members */}
       <div className="relative group p-5 bg-[#121824]/70 border border-white/10 rounded-2xl backdrop-blur-xl hover:border-emerald-500/40 transition-all hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(16,185,129,0.15)] overflow-hidden">
 
-        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-emerald-500/10 to-transparent rounded-bl-full pointer-events-none" />
+        <div className="absolute top-0 right-0 w-24 h-24 bg-linear-to-br from-emerald-500/10 to-transparent rounded-bl-full pointer-events-none" />
 
         <div className="flex items-center justify-between">
 
@@ -138,7 +138,7 @@ export default function DashboardStats({
       {/* Total Revenue */}
       <div className="relative group p-5 bg-[#121824]/70 border border-white/10 rounded-2xl backdrop-blur-xl hover:border-purple-500/40 transition-all hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(168,85,247,0.15)] overflow-hidden">
 
-        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-500/10 to-transparent rounded-bl-full pointer-events-none" />
+        <div className="absolute top-0 right-0 w-24 h-24 bg-linear-to-br from-purple-500/10 to-transparent rounded-bl-full pointer-events-none" />
 
         <div className="flex items-center justify-between">
 
@@ -175,7 +175,7 @@ export default function DashboardStats({
 
         <div className="mt-1.5 w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
 
-          <div className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full w-full" />
+          <div className="h-full bg-linear-to-r from-purple-500 to-indigo-500 rounded-full w-full" />
 
         </div>
 
@@ -184,7 +184,7 @@ export default function DashboardStats({
       {/* Monthly Revenue */}
       <div className="relative group p-5 bg-[#121824]/70 border border-white/10 rounded-2xl backdrop-blur-xl hover:border-cyan-500/40 transition-all hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(6,182,212,0.15)] overflow-hidden">
 
-        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-bl-full pointer-events-none" />
+        <div className="absolute top-0 right-0 w-24 h-24 bg-linear-to-br from-cyan-500/10 to-transparent rounded-bl-full pointer-events-none" />
 
         <div className="flex items-center justify-between">
 

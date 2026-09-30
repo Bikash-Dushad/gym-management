@@ -47,10 +47,10 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-[#0a0d14] bg-[radial-gradient(circle_at_50%_20%,rgba(99,102,241,0.15)_0%,transparent_60%),radial-gradient(circle_at_80%_80%,rgba(6,182,212,0.1)_0%,transparent_60%)]">
-      <div className="w-full max-w-[440px] p-8 sm:p-9 bg-[#121824]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] flex flex-col gap-6 animate-fade-in">
+      <div className="w-full max-w-110 p-8 sm:p-9 bg-[#121824]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] flex flex-col gap-6 animate-fade-in">
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center gap-2">
-          <div className="w-13 h-13 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-[0_6px_20px_rgba(99,102,241,0.4)] mb-2">
+          <div className="w-13 h-13 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-[0_6px_20px_rgba(99,102,241,0.4)] mb-2">
             <Hexagon size={32} />
           </div>
           <h1 className="text-2xl font-bold text-gray-100 tracking-tight">
@@ -116,7 +116,7 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-lg font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(99,102,241,0.4)] active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none mt-2 cursor-pointer"
+            className="w-full py-3.5 px-4 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-lg font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(99,102,241,0.4)] active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none mt-2 cursor-pointer"
           >
             {loading ? (
               <span>Authenticating...</span>

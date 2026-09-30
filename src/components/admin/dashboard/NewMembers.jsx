@@ -116,7 +116,7 @@ export default function NewMembers({
             className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
               filterActiveOnly
                 ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
-                : "bg-white/[0.05] text-gray-400 border-white/10 hover:text-gray-200"
+                : "bg-white/5 text-gray-400 border-white/10 hover:text-gray-200"
             }`}
             title="Toggle active only"
           >
@@ -136,7 +136,7 @@ export default function NewMembers({
 
             <table className="w-full text-left text-xs text-gray-300">
 
-              <thead className="bg-white/[0.03] text-gray-400 font-semibold uppercase tracking-wider border-b border-white/10">
+              <thead className="bg-white/3 text-gray-400 font-semibold uppercase tracking-wider border-b border-white/10">
 
                 <tr>
 
@@ -176,7 +176,7 @@ export default function NewMembers({
                           "/admin/users"
                         )
                       }
-                      className="hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                      className="hover:bg-white/4 transition-colors cursor-pointer group"
                     >
 
                       {/* Member */}
@@ -184,7 +184,7 @@ export default function NewMembers({
 
                         <div className="flex items-center gap-3">
 
-                          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-600/40 to-purple-600/40 border border-indigo-500/40 text-indigo-200 font-bold flex items-center justify-center text-sm shrink-0">
+                          <div className="w-9 h-9 rounded-full bg-linear-to-br from-indigo-600/40 to-purple-600/40 border border-indigo-500/40 text-indigo-200 font-bold flex items-center justify-center text-sm shrink-0">
 
                             {user?.name
                               ?.charAt(0)

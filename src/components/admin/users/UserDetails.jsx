@@ -99,7 +99,7 @@ export default function UserDetails({ userId, initialData, initialError }) {
       {/* Main Profile Hero Card */}
       <div className="bg-[#121824]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="flex items-center gap-5">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 border border-indigo-400/40 text-white font-bold text-3xl flex items-center justify-center shadow-lg shrink-0">
+          <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-indigo-500 to-purple-600 border border-indigo-400/40 text-white font-bold text-3xl flex items-center justify-center shadow-lg shrink-0">
             {user.name?.charAt(0)?.toUpperCase() || "U"}
           </div>
           <div className="flex flex-col gap-1.5">
@@ -201,7 +201,7 @@ export default function UserDetails({ userId, initialData, initialError }) {
 
 function DetailItem({ icon: Icon, label, value }) {
   return (
-    <div className="flex flex-col gap-1 p-3 bg-white/[0.025] rounded-xl border border-white/5">
+    <div className="flex flex-col gap-1 p-3 bg-white/2.5 rounded-xl border border-white/5">
       <div className="flex items-center gap-2 text-gray-400 text-xs font-medium">
         <Icon size={14} className="text-gray-500" />
         <span>{label}</span>

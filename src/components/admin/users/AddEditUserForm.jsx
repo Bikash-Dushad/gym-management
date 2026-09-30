@@ -353,7 +353,7 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
               </button>
               <button
                 type="submit"
-                className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-lg text-sm font-semibold transition-all hover:shadow-[0_0_15px_rgba(99,102,241,0.4)] cursor-pointer disabled:opacity-50"
+                className="flex items-center gap-1.5 px-4 py-2 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-lg text-sm font-semibold transition-all hover:shadow-[0_0_15px_rgba(99,102,241,0.4)] cursor-pointer disabled:opacity-50"
                 disabled={saving}
               >
                 <Check size={16} />

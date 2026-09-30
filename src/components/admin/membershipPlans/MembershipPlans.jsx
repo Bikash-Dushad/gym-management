@@ -77,7 +77,7 @@ export default function MembershipPlans({ plans = [] }) {
 
         <button
           onClick={handleOpenAddModal}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-sm font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_15px_rgba(99,102,241,0.35)] active:translate-y-0 cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2.5 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-sm font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_15px_rgba(99,102,241,0.35)] active:translate-y-0 cursor-pointer"
         >
           <Plus size={18} />
           <span>Add Membership Plan</span>

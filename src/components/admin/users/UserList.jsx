@@ -20,7 +20,7 @@ const UserRow = ({
 
   return (
     <tr
-      className="border-b border-white/10 hover:bg-white/[0.05] transition-colors cursor-pointer group"
+      className="border-b border-white/10 hover:bg-white/5 transition-colors cursor-pointer group"
       onClick={() => onViewDetails(id)}
     >
       <td className="px-4 py-3.5 align-middle">
@@ -245,7 +245,7 @@ export default function UserList({
         </h2>
         <Filters query={query} onFieldChange={setQueryField} />
         <button
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-lg text-sm font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_15px_rgba(99,102,241,0.35)] active:translate-y-0 cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-lg text-sm font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_15px_rgba(99,102,241,0.35)] active:translate-y-0 cursor-pointer"
           onClick={openAddModal}
         >
           <UserPlus size={16} />
@@ -262,7 +262,7 @@ export default function UserList({
 
       <div className="overflow-x-auto rounded-xl border border-white/10">
         <table className="w-full border-collapse text-left text-sm">
-          <thead className="bg-white/[0.03] text-[0.72rem] font-bold text-gray-400 uppercase tracking-wider border-b border-white/10">
+          <thead className="bg-white/3 text-[0.72rem] font-bold text-gray-400 uppercase tracking-wider border-b border-white/10">
             <tr>
               <th className="px-4 py-3.5">Name</th>
               <th className="px-4 py-3.5">Phone</th>

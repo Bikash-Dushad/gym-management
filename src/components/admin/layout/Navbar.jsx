@@ -58,11 +58,11 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="h-[72px] px-6 sm:px-8 flex items-center justify-between bg-[#0a0d14]/70 backdrop-blur-xl border-b border-white/10 sticky top-0 z-40">
+    <header className="h-18 px-6 sm:px-8 flex items-center justify-between bg-[#0a0d14]/70 backdrop-blur-xl border-b border-white/10 sticky top-0 z-40">
       <div className="flex items-center gap-5 ml-auto">
         {/* Node.js Backend API Status Indicator */}
         <div
-          className="flex items-center gap-2 px-3.5 py-1.5 bg-white/[0.03] border border-white/10 rounded-full text-[0.78rem] text-gray-400"
+          className="flex items-center gap-2 px-3.5 py-1.5 bg-white/3 border border-white/10 rounded-full text-[0.78rem] text-gray-400"
           title="Server status"
         >
           <span
@@ -100,7 +100,7 @@ export default function Navbar() {
               <img
                 src="/adminAvatar.png"
                 alt={admin.name}
-                className="w-[38px] h-[38px] rounded-full object-cover border-2 border-indigo-500"
+                className="w-9.5 h-9.5 rounded-full object-cover border-2 border-indigo-500"
               />
               <span className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#0a0d14] rounded-full"></span>
             </div>

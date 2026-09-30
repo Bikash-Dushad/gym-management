@@ -26,12 +26,12 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`h-screen sticky top-0 bg-[#0d121d] border-r border-white/10 flex flex-col transition-all duration-300 ease-out z-45 select-none shrink-0 ${collapsed ? 'w-20' : 'w-[260px]'
+      className={`h-screen sticky top-0 bg-[#0d121d] border-r border-white/10 flex flex-col transition-all duration-300 ease-out z-45 select-none shrink-0 ${collapsed ? 'w-20' : 'w-65'
         }`}
     >
       {/* Brand Header */}
-      <div className="h-[72px] px-5 flex items-center gap-3.5 border-b border-white/10">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-[0_4px_14px_rgba(99,102,241,0.35)] shrink-0">
+      <div className="h-18 px-5 flex items-center gap-3.5 border-b border-white/10">
+        <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-[0_4px_14px_rgba(99,102,241,0.35)] shrink-0">
           <Hexagon size={28} />
         </div>
         {!collapsed && (

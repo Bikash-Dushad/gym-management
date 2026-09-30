@@ -138,7 +138,7 @@ export default function AdminDashboard({ initialData = null }) {
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="flex items-center gap-2 px-3.5 py-2.5 bg-white/[0.05] hover:bg-white/[0.1] text-gray-200 border border-white/10 rounded-xl text-xs sm:text-sm font-semibold transition-all hover:border-white/20 active:scale-95 disabled:opacity-50 cursor-pointer"
+            className="flex items-center gap-2 px-3.5 py-2.5 bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 rounded-xl text-xs sm:text-sm font-semibold transition-all hover:border-white/20 active:scale-95 disabled:opacity-50 cursor-pointer"
             title="Refresh dashboard metrics"
           >
             <RefreshCw
@@ -157,7 +157,7 @@ export default function AdminDashboard({ initialData = null }) {
             onClick={() =>
               router.push("/admin/users")
             }
-            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-xs sm:text-sm font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(99,102,241,0.4)] active:translate-y-0 cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2.5 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-xs sm:text-sm font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(99,102,241,0.4)] active:translate-y-0 cursor-pointer"
           >
             <Plus size={16} />
 
@@ -168,7 +168,7 @@ export default function AdminDashboard({ initialData = null }) {
             onClick={() =>
               router.push("/admin/membershipPlans")
             }
-            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-xl text-xs sm:text-sm font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(6,182,212,0.4)] active:translate-y-0 cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2.5 bg-linear-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-xl text-xs sm:text-sm font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(6,182,212,0.4)] active:translate-y-0 cursor-pointer"
           >
             <Zap size={16} />
 
