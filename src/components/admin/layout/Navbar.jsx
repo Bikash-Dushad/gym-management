@@ -36,7 +36,6 @@ export default function Navbar() {
           checkServerStatusService(),
           getAdminProfileService(),
         ]);
-        console.log(profile);
         setBackendHealth(server);
         setAdmin(profile);
       } catch (err) {

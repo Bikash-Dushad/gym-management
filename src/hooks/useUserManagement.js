@@ -1,9 +1,9 @@
 import { useState, useCallback, useEffect } from "react";
 import {
   createUserService,
+  updateUserService,
   renewMembershipService,
   //   deleteUserService,
-  //   updateUserService,
 } from "@/services/admin/client.service";
 
 export function useUserManagement(initialUsers, onSuccess) {
@@ -36,17 +36,20 @@ export function useUserManagement(initialUsers, onSuccess) {
   );
 
   const handleUpdate = useCallback(
-    async (userId, formData) => {
+    async (arg1, arg2) => {
       setLoading(true);
       setError(null);
       try {
-        // const updated = await updateUserService(userId, formData);
-        // setUsers((prev) =>
-        //   prev.map((u) => ((u._id || u.id) === userId ? updated : u)),
-        // );
-        // onSuccess?.("User updated successfully");
-        // return updated;
-        console.log("user updated");
+        const payload =
+          typeof arg1 === "string" ? { userId: arg1, ...arg2 } : arg1;
+        const updated = await updateUserService(payload);
+        setUsers((prev) =>
+          prev.map((u) =>
+            (u._id || u.id) === payload.userId ? { ...u, ...updated } : u,
+          ),
+        );
+        onSuccess?.("User updated successfully");
+        return updated;
       } catch (err) {
         setError(err.message || "Failed to update user");
         throw err;
@@ -82,7 +85,6 @@ export function useUserManagement(initialUsers, onSuccess) {
       setLoading(true);
       setError(null);
       try {
-        console.log("user deleted");
         // await deleteUserService(userId);
         // setUsers((prev) => prev.filter((u) => (u._id || u.id) !== userId));
         // onSuccess?.("User deleted successfully");

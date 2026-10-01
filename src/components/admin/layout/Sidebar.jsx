@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
@@ -10,24 +10,33 @@ import {
   ChevronLeft,
   ChevronRight,
   Hexagon,
-  Database
-} from 'lucide-react';
+  Database,
+} from "lucide-react";
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
 
   const mainNav = [
-    { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-    { label: 'Users', href: '/admin/users', icon: Users },
-    { label: 'MembershipPlans', href: '/admin/membershipPlans', icon: Dumbbell },
-
+    { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+    { label: "Users", href: "/admin/users", icon: Users },
+    {
+      label: "MembershipPlans",
+      href: "/admin/membershipPlans",
+      icon: Dumbbell,
+    },
+    {
+      label: "AdminProfile",
+      href: "/admin/adminProfile",
+      icon: Dumbbell,
+    },
   ];
 
   return (
     <aside
-      className={`h-screen sticky top-0 bg-[#0d121d] border-r border-white/10 flex flex-col transition-all duration-300 ease-out z-45 select-none shrink-0 ${collapsed ? 'w-20' : 'w-65'
-        }`}
+      className={`h-screen sticky top-0 bg-[#0d121d] border-r border-white/10 flex flex-col transition-all duration-300 ease-out z-45 select-none shrink-0 ${
+        collapsed ? "w-20" : "w-65"
+      }`}
     >
       {/* Brand Header */}
       <div className="h-18 px-5 flex items-center gap-3.5 border-b border-white/10">
@@ -55,15 +64,16 @@ export default function Sidebar() {
             const Icon = item.icon;
             const isActive =
               pathname === item.href ||
-              (item.href !== '/admin' && pathname.startsWith(item.href));
+              (item.href !== "/admin" && pathname.startsWith(item.href));
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-sm font-medium transition-all ${isActive
-                  ? 'bg-indigo-500/15 text-indigo-400 font-semibold'
-                  : 'text-gray-400 hover:bg-white/5 hover:text-gray-100'
-                  }`}
+                className={`relative flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-sm font-medium transition-all ${
+                  isActive
+                    ? "bg-indigo-500/15 text-indigo-400 font-semibold"
+                    : "text-gray-400 hover:bg-white/5 hover:text-gray-100"
+                }`}
                 title={collapsed ? item.label : undefined}
               >
                 <Icon size={20} className="shrink-0" />

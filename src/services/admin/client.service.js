@@ -79,3 +79,11 @@ export const renewMembershipService = async (payload) => {
   }
   return response.data;
 };
+
+export const updateUserService = async (payload) => {
+  const response = await postData("/admin/update-user", payload)
+  if (!response.success) {
+    throw new Error(response.message)
+  }
+  return response.data
+}

@@ -72,18 +72,27 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
       try {
         setUserLoading(true);
         const data = await getUserDetailsService(userId);
+        const userObj = data.users || data.user || {};
+        const membershipObj = data.membership || {};
+        const planObj = data.membershipPlans || data.membershipPlan || {};
+
         setFormData({
-          name: data.users?.name || "",
-          email: data.users?.email || "",
-          phone: data.users?.phone || "",
-          age: data.users?.age || "",
-          height: data.users?.height || "",
-          bloodGroup: data.users?.bloodGroup || "",
-          membershipPlan: data.membership?.membershipPlan || "",
-          price: data.membership?.price || "",
-          weight: data.membership?.weight || "",
-          type: data.membership?.type || "",
-          trainer: data.membership?.trainer || "",
+          name: userObj.name || "",
+          email: userObj.email || "",
+          phone: userObj.phone || "",
+          age: userObj.age ?? "",
+          height: userObj.height ?? "",
+          bloodGroup: userObj.bloodGroup || "",
+          membershipPlan:
+            membershipObj.membershipPlan ||
+            membershipObj.membershipPlanId ||
+            planObj.id ||
+            planObj._id ||
+            "",
+          price: membershipObj.price ?? planObj.price ?? "",
+          weight: membershipObj.weight ?? userObj.weight ?? "",
+          type: membershipObj.type ?? userObj.type ?? "",
+          trainer: membershipObj.trainer || membershipObj.trainerId || "",
         });
       } catch (error) {
         setUserError(error.message || "Failed to load user details");
@@ -100,7 +109,7 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
 
   const handlePlanChange = (e) => {
     const selectedId = e.target.value;
-    const selectedPlan = plans.find((p) => p.id === selectedId);
+    const selectedPlan = plans.find((p) => (p.id || p._id) === selectedId);
     setFormData((prev) => ({
       ...prev,
       membershipPlan: selectedId,
@@ -111,21 +120,54 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const payload = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      age: Number(formData.age),
-      height: Number(formData.height),
-      bloodGroup: formData.bloodGroup,
-      membershipPlanId: formData.membershipPlan,
-      price: Number(formData.price),
-      weight: Number(formData.weight),
-      type: formData.type,
-      trainerId: formData.trainer || "",
-    };
-
-    onSave(payload);
+    if (isEditMode) {
+      const payload = {
+        userId: userId,
+        name: formData.name || "",
+        bloodGroup: formData.bloodGroup || "",
+        age:
+          formData.age !== "" && formData.age !== null && formData.age !== undefined
+            ? String(formData.age)
+            : "",
+        height:
+          formData.height !== "" &&
+          formData.height !== null &&
+          formData.height !== undefined
+            ? String(formData.height)
+            : "",
+        weight:
+          formData.weight !== "" &&
+          formData.weight !== null &&
+          formData.weight !== undefined
+            ? String(formData.weight)
+            : "",
+        type: formData.type || "",
+        membershipPlanId: formData.membershipPlan || "",
+        price:
+          formData.price !== "" &&
+          formData.price !== null &&
+          formData.price !== undefined
+            ? String(formData.price)
+            : "",
+        trainerId: formData.trainer || "",
+      };
+      onSave(payload);
+    } else {
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        age: Number(formData.age),
+        height: Number(formData.height),
+        bloodGroup: formData.bloodGroup,
+        membershipPlanId: formData.membershipPlan,
+        price: Number(formData.price),
+        weight: Number(formData.weight),
+        type: formData.type,
+        trainerId: formData.trainer || "",
+      };
+      onSave(payload);
+    }
   };
 
   if (!mounted) return null;
@@ -182,7 +224,7 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-medium text-gray-300">
-                  Email Address
+                  Email Address {isEditMode && <span className="text-xs text-gray-500 font-normal">(Cannot be updated)</span>}
                 </label>
                 <div className="relative flex items-center">
                   <Mail
@@ -191,11 +233,12 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
                   />
                   <input
                     type="email"
-                    required
+                    required={!isEditMode}
+                    disabled={isEditMode}
                     value={formData.email}
                     onChange={handleChange("email")}
                     placeholder="john.doe@gmail.com"
-                    className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
+                    className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -203,7 +246,7 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex flex-col gap-1.5 flex-1">
                   <label className="text-xs font-medium text-gray-300">
-                    Phone Number
+                    Phone Number {isEditMode && <span className="text-xs text-gray-500 font-normal">(Cannot be updated)</span>}
                   </label>
                   <div className="relative flex items-center">
                     <Phone
@@ -212,10 +255,11 @@ export default function AddEditUserForm({ userId, onClose, onSave, saving }) {
                     />
                     <input
                       type="tel"
+                      disabled={isEditMode}
                       value={formData.phone}
                       onChange={handleChange("phone")}
                       placeholder="e.g. 9800000000"
-                      className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all"
+                      className="w-full py-2.5 pl-10 pr-3 bg-white/5 border border-white/10 rounded-lg text-gray-100 placeholder-gray-500 text-sm outline-none focus:border-indigo-500 focus:bg-white/[0.07] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                 </div>
