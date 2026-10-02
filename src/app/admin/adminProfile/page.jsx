@@ -6,6 +6,8 @@ export const metadata = {
   description: "Server-side rendered admin dashboard metrics",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminProfilePage() {
   const response = await getAdminProfileService();
   const profile = response;

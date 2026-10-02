@@ -6,6 +6,7 @@ export const metadata = {
   description:
     "Server-side rendered admin dashboard metrics and gym management",
 };
+export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   try {
