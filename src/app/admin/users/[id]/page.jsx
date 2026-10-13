@@ -6,6 +6,8 @@ export const metadata = {
   description: "View user detailed profile and membership info",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function UserDetailsPage({ params }) {
   const resolvedParams = await params;
   const userId = resolvedParams.id;

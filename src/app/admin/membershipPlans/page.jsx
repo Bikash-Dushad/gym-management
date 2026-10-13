@@ -8,7 +8,15 @@ export const metadata = {
 };
 
 
+export const dynamic = "force-dynamic";
+
 export default async function membershipPlansPage() {
-  const response = await listOfMembershipPlansService()
-  return <MembershipPlans plans={response.data} />;
+  try {
+    const response = await listOfMembershipPlansService();
+    return <MembershipPlans plans={response?.data || []} />;
+  } catch (error) {
+    console.error("Failed to load membership plans:", error);
+    return <MembershipPlans plans={[]} />;
+  }
 }
+

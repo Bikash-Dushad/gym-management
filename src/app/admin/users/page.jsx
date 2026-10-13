@@ -7,6 +7,8 @@ export const metadata = {
     "Manage users, assign roles, inspect account statuses server-side",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function UsersPage({ searchParams }) {
   const params = await searchParams;
 
@@ -17,18 +19,30 @@ export default async function UsersPage({ searchParams }) {
     limit: Math.min(100, Math.max(1, Number(params.limit) || 10)),
   };
 
-  const resData = await getListOfUsersService(payload);
+  try {
+    const resData = await getListOfUsersService(payload);
 
-  const users = resData?.users || (Array.isArray(resData) ? resData : []);
-  const total = resData?.totalUsers ?? resData?.total ?? users.length;
-  const totalPages = resData?.totalPages ?? Math.ceil(total / payload.limit) ?? 1;
+    const users = resData?.users || (Array.isArray(resData) ? resData : []);
+    const total = resData?.totalUsers ?? resData?.total ?? users.length;
+    const totalPages = resData?.totalPages ?? Math.ceil(total / payload.limit) ?? 1;
 
-  return (
-    <UserList
-      initialUsers={users}
-      initialQuery={payload}
-      total={total}
-      totalPages={totalPages}
-    />
-  );
+    return (
+      <UserList
+        initialUsers={users}
+        initialQuery={payload}
+        total={total}
+        totalPages={totalPages}
+      />
+    );
+  } catch (error) {
+    console.error("Failed to load users:", error);
+    return (
+      <UserList
+        initialUsers={[]}
+        initialQuery={payload}
+        total={0}
+        totalPages={1}
+      />
+    );
+  }
 }

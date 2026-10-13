@@ -6,6 +6,8 @@ export const metadata = {
   description: "Administrative portal for Gym Management",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function AdminLayout({ children }) {
   return (
     <div className="flex min-h-screen bg-[#0a0d14] bg-[radial-gradient(ellipse_at_20%_0%,rgba(99,102,241,0.08)_0%,transparent_60%),radial-gradient(ellipse_at_80%_100%,rgba(6,182,212,0.05)_0%,transparent_60%)]">
